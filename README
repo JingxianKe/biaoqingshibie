@@ -1,0 +1,43 @@
+安装keras==2.9.0, tensorflow==2.9.1
+
+训练之前先生成.HDF5数据，运行如下命令：
+python build_dataset.py
+
+以下命令查看生成的.HDF5文件：
+ls -l fer2013/hdf5
+
+然后运行如下命令进行训练：
+python train_recognizer.py --checkpoints checkpoints
+python train_recognizer.py --checkpoints checkpoints --model checkpoints/epoch_60.hdf5 --start-epoch 60
+
+评估：
+python test_recognizer.py --model checkpoints/epoch_60.hdf5
+
+使用摄像头进行检测：
+python emotion_detector.py --cascade haarcascade_frontalface_default.xml --model checkpoints/epoch_60.hdf5
+
+
+            学习率调度器
+    ——————————————————————————
+    Epoch       Learning Rate
+    ——————————————————————————
+    1~20        1e-3
+    21~40       1e-4
+    41~60       1e-5
+    ——————————————————————————
+
+精度和损失值在fer2013/output文件夹中
+epoch最终的值依赖于你的具体训练情况，我的是60
+
+注意：要想获得好的结果，需要不断训练，不断迭代。一开始不会是最好的模型。
+     你需要运行 -> 得到结果 -> 解释获得的结果 -> 调整参数 -> 再次运行 -> ... 一直重复
+
+     最重要的文件是emotionvggnet.py————模型是如何构建的
+
+######## 需要知道的 ##########
+我们的每个表情不可能100%是笑的，也不可能100%是哭的，往往是多种表情的混合。
+我们不能只看单个表情的概率，而应该看所有表情的概率分布。
+
+
+看完给提点建议哈！
+
